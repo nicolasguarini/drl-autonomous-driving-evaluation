@@ -3,7 +3,7 @@ import highway_env
 from stable_baselines3 import DQN
 import pandas as pd
 
-MODEL_PATH = "../models/dqn/highway-v0_model"
+MODEL_PATH = "../models/highway-v0_DQN_model"
 ENV_TYPE = "highway-v0"
 EP_COUNT = 100
 
