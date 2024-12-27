@@ -1,6 +1,6 @@
 import gymnasium
 import highway_env
-from stable_baselines3 import DQN
+from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import BaseCallback
 import pandas as pd
 import os
@@ -30,26 +30,25 @@ class TrainingAnalysisCallback(BaseCallback):
 
     def _on_training_end(self) -> None:
         df = pd.DataFrame(self.data)
-        df.to_csv(f"../training_logs/train_dqn_{ENV_TYPE}.csv", index=False)
+        df.to_csv(f"../training_logs/train_ppo_{ENV_TYPE}.csv", index=False)
         print("Training data saved to training_logs/training_data.csv")
 
 env = gymnasium.make(ENV_TYPE)
 
-model = DQN('MlpPolicy', env,
-              policy_kwargs=dict(net_arch=[256, 256]),
-              learning_rate=5e-4,
-              buffer_size=10000,
-              learning_starts=200,
-              batch_size=64,
-              gamma=0.8,
-              train_freq=4,
-              gradient_steps=2,
-              target_update_interval=50,
-              verbose=0,
-              tensorboard_log="../tensorboard_logs/"
+model = PPO('MlpPolicy', env,
+            policy_kwargs=dict(net_arch=[256, 256]),
+            learning_rate=5e-4,
+            n_steps=2048,
+            batch_size=64,
+            gamma=0.8,
+            n_epochs=10,
+            gae_lambda=0.95,
+            clip_range=0.2,
+            verbose=0,
+            tensorboard_log="../tensorboard_logs/"
             )
 
 callback = TrainingAnalysisCallback(verbose=1)
 model.learn(N_TRAIN_STEPS, progress_bar=True, callback=callback)
 
-model.save(f"../models/{ENV_TYPE}_DQN_model")
+model.save(f"../models/{ENV_TYPE}_PPO_model")

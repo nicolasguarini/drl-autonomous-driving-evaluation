@@ -3,7 +3,7 @@ import highway_env
 from stable_baselines3 import PPO
 import pandas as pd
 
-ENV_TYPE = "highway-v0"
+ENV_TYPE = "intersection-v0"
 MODEL_PATH = f"../models/{ENV_TYPE}_PPO_model"
 EP_COUNT = 100
 
@@ -52,6 +52,6 @@ for i in range(EP_COUNT):
 
 
 df = pd.DataFrame(data_collection)
-df.to_csv(f"{ENV_TYPE}_ppo_model_performance.csv", index=False)
+df.to_csv(f"../performance_logs/{ENV_TYPE}_ppo_model_performance.csv", index=False)
 print(f"Performance data saved to {ENV_TYPE}_ppo_model_performance.csv")
 print(df.describe())

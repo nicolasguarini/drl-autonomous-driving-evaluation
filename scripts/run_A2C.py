@@ -1,13 +1,13 @@
 import gymnasium
 import highway_env
-from stable_baselines3 import DQN
+from stable_baselines3 import PPO
 import pandas as pd
 
 ENV_TYPE = "intersection-v0"
-MODEL_PATH = f"../models/{ENV_TYPE}_DQN_model"
+MODEL_PATH = f"../models/{ENV_TYPE}_A2C_model"
 EP_COUNT = 100
 
-model = DQN.load(MODEL_PATH)
+model = PPO.load(MODEL_PATH)
 env = gymnasium.make(ENV_TYPE, render_mode="human")
 
 data_collection = []
@@ -52,6 +52,6 @@ for i in range(EP_COUNT):
 
 
 df = pd.DataFrame(data_collection)
-print("Performance data saved to model_performance.csv")
+df.to_csv(f"../performance_logs/{ENV_TYPE}_a2c_model_performance.csv", index=False)
+print(f"Performance data saved to {ENV_TYPE}_a2c_model_performance.csv")
 print(df.describe())
-df.to_csv(f"../performance_logs/{ENV_TYPE}_dqn_model_performance.csv", index=False)
